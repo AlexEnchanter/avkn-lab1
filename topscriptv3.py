@@ -76,9 +76,14 @@ def evaluation(_type):
 		for i in range(1,11):
 			genDCTraffic(f'h{t1}',f'h{t2}', _type, i, 10)
 			time = subprocess.getoutput("ITGDec recv.log | grep 'Total time' | tail -1")
-			result[k][i-1]= float(re.search("[0-9]+.?[0-9]*",time)[0])
+			bitrate = subprocess.getoutput("ITGDec recv.log | grep 'Average bitrate' | tail -1")
+
+			bitrate = float(re.search("[0-9]+.?[0-9]*", bitrate)[0])
+			time = re.search("[0-9]+.?[0-9]*", time)[0]
+
+			result[k][i-1] = float(time)
 			count += 1
-			print(f"count: {count}, time: {time}")
+			print(f"count: {count}, time: {time}, bitrate: {bitrate/1000} Mbps")
 	np.save(f'data_{traffic_types[_type]["name"]}_ate-{agr_to_edge_bw}_atc-{agr_to_core_bw}', result)	
 
 def dataCDF(_):
