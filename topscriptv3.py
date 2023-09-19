@@ -8,6 +8,7 @@ import numpy as np
 import random
 import subprocess
 import re
+import time
 
 x_web = [0,10_000, 20_000,30_000,50_000,80_000,200_000, 1_000_000, 2_000_000,5_000_000, 10_000_000,30_000_000]	
 y_web = [0., 0.18, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.98, 1.]
@@ -74,16 +75,18 @@ def evaluation(_type):
 	for k in range(10):
 		t1, t2 = getRandomHosts()
 		for i in range(1,11):
+			before_time = time.time() 
 			genDCTraffic(f'h{t1}',f'h{t2}', _type, i, 10)
-			time = subprocess.getoutput("ITGDec recv.log | grep 'Total time' | tail -1")
+			after_time = time.time()
+			itg_time = subprocess.getoutput("ITGDec recv.log | grep 'Total time' | tail -1")
 			bitrate = subprocess.getoutput("ITGDec recv.log | grep 'Average bitrate' | tail -1")
-
+		
 			bitrate = float(re.search("[0-9]+.?[0-9]*", bitrate)[0])
-			time = re.search("[0-9]+.?[0-9]*", time)[0]
+			itg_time = re.search("[0-9]+.?[0-9]*", itg_time)[0]
 
-			result[k][i-1] = float(time)
+			result[k][i-1] = float(itg_time)
 			count += 1
-			print(f"count: {count}, time: {time}, bitrate: {bitrate/1000} Mbps")
+			print(f"count: {count}, time: {itg_time}, bitrate: {round(bitrate/1000, 4)} Mbps, real time: {round(after_time - before_time, 4)}")
 	np.save(f'data_{traffic_types[_type]["name"]}_ate-{agr_to_edge_bw}_atc-{agr_to_core_bw}', result)	
 
 def dataCDF(_):
