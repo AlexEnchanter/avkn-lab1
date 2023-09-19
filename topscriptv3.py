@@ -21,6 +21,7 @@ agr_to_edge_bw = 20
 
 gen_func = None
 debug = False
+total_data_to_send = 0
 
 class MyTopo( Topo  ):
     def build( self ):
@@ -78,15 +79,15 @@ def evaluation(_type):
 			before_time = time.time() 
 			genDCTraffic(f'h{t1}',f'h{t2}', _type, i, 10)
 			after_time = time.time()
-			itg_time = subprocess.getoutput("ITGDec recv.log | grep 'Total time' | tail -1")
-			bitrate = subprocess.getoutput("ITGDec recv.log | grep 'Average bitrate' | tail -1")
-		
-			bitrate = float(re.search("[0-9]+.?[0-9]*", bitrate)[0])
-			itg_time = re.search("[0-9]+.?[0-9]*", itg_time)[0]
 
-			result[k][i-1] = float(itg_time)
+			itg_time = subprocess.getoutput("ITGDec recv.log | grep 'Total time' | tail -1")
+			bitrate = subprocess.getoutput("ITGDec recv.log | grep 'Average bitrate' | tail -1") 
+			bitrate = float(re.search("[0-9]+.?[0-9]*", bitrate)[0])
+			itg_time = float(re.search("[0-9]+.?[0-9]*", itg_time)[0])
+
+			result[k][i-1] = itg_time
 			count += 1
-			print(f"count: {count}, time: {itg_time}, bitrate: {round(bitrate/1000, 4)} Mbps, real time: {round(after_time - before_time, 4)}")
+			print(f"count: {count}, time: {round(itg_time, 4)}, bitrate: {round(bitrate/1000, 4)} Mbps, total data: {total_data_to_send/1000} MB, real time: {round(after_time - before_time, 4)}")
 	np.save(f'data_{traffic_types[_type]["name"]}_ate-{agr_to_edge_bw}_atc-{agr_to_core_bw}', result)	
 
 def dataCDF(_):
@@ -100,6 +101,8 @@ def expCDF(_type):
 	return math.ceil(np.random.default_rng().exponential(mean_flow)/1000)
 	
 def makeScript(sink_ip, intensity, gen_time, traffic_type):
+	global total_data_to_send 
+	total_data_to_send = 0
 	test = '-T TCP -a {} -rp {} -k {} -d {} -C 10000000\n'
 	flow_size = 0
 	delay = -1
@@ -109,6 +112,7 @@ def makeScript(sink_ip, intensity, gen_time, traffic_type):
 		if i % intensity == 0:
 			delay += 1
 		flow_size = gen_func(traffic_type)
+		total_data_to_send += flow_size
 		script_file += test.format(sink_ip, port, flow_size, delay*1_000)
 		port += 1
 	f = open('script.txt', "w")

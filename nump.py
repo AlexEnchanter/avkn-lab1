@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-data = np.load("data_data_mining_ate-20_atc-160.npy")
+data = np.load("data_web_search_ate-20_atc-20.npy")
 # data = np.load("data_data_mining_ate-20_atc-20.npy")
 mean = np.mean(data, axis=0)
 percentile_95 = np.percentile(data,95, axis=0)
