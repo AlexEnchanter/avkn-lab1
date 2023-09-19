@@ -78,7 +78,7 @@ def evaluation(_type):
 			time = subprocess.getoutput("ITGDec recv.log | grep 'Total time' | tail -1")
 			result[k][i-1]= float(re.search("[0-9]+.?[0-9]*",time)[0])
 			count += 1
-			print(count)
+			print(f"count: {count}, time: {time}")
 	np.save(f'data_{traffic_types[_type]["name"]}_ate-{agr_to_edge_bw}_atc-{agr_to_core_bw}', result)	
 
 def dataCDF(_):
