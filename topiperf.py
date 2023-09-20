@@ -59,7 +59,7 @@ def evaluation(_type):
             after_time = time.time()  
             result[k][i-1] = flow_time
             count += 1
-            print(f" count: {count}, time: {round(flow_time, 4)}, Mbps, total data: {round(total_data, 4)} MB, real time: {round(after_time - before_time, 4)}\n")
+            print(f" count: {count}, time: {round(flow_time, 4)}, total data: {round(total_data, 4)} MB, real time: {round(after_time - before_time, 4)}\n")
 
     np.save(f'data_{traffic_types[_type]["name"]}_ate-{agr_to_edge_bw}_atc-{agr_to_core_bw}', result)	
 
@@ -85,7 +85,7 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
             source_node.cmd(iperfcmd.format(sink_ip, data))
         time.sleep(1) # wait 1s 
 
-    print(f"waiting for senders to finish total data to send:{aaa/1000}Mb over {num_of_flows} flows")
+    print(f"waiting for senders to finish, total data to send:{aaa/1000}Mb over {num_of_flows} flows")
     sink_node.cmd("wait")
     source_node.cmd("wait")
 
