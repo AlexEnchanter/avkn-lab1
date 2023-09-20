@@ -137,46 +137,46 @@ net.start()
 evaluation(2)
 net.stop()
  
-# gen_func = webCDF  
-# # web 20
-# topos = MyTopo()
-# net = Mininet(topos, link=TCLink)
-# net.start()
-# evaluation(1)
-# net.stop()
+gen_func = webCDF  
+# web 20
+topos = MyTopo()
+net = Mininet(topos, link=TCLink)
+net.start()
+evaluation(1)
+net.stop()
  
-# agr_to_edge_bw = 80 
-# gen_func = dataCDF 
-# # data 80
-# topos = MyTopo()
-# net = Mininet(topos, link=TCLink)
-# net.start()
-# evaluation(2)
-# net.stop()
+agr_to_edge_bw = 80 
+gen_func = dataCDF 
+# data 80
+topos = MyTopo()
+net = Mininet(topos, link=TCLink)
+net.start()
+evaluation(2)
+net.stop()
  
-# gen_func = webCDF  
-# # web 80
-# topos = MyTopo()
-# net = Mininet(topos, link=TCLink)
-# net.start()
-# evaluation(1)
-# net.stop()
+gen_func = webCDF  
+# web 80
+topos = MyTopo()
+net = Mininet(topos, link=TCLink)
+net.start()
+evaluation(1)
+net.stop()
 
 
-# agr_to_core_bw = 160
-# agr_to_edge_bw = 80 
-# gen_func = dataCDF 
-# # data 80 anb 160
-# topos = MyTopo()
-# net = Mininet(topos, link=TCLink)
-# net.start()
-# evaluation(2)
-# net.stop()
+agr_to_core_bw = 160
+agr_to_edge_bw = 80 
+gen_func = dataCDF 
+# data 80 anb 160
+topos = MyTopo()
+net = Mininet(topos, link=TCLink)
+net.start()
+evaluation(2)
+net.stop()
  
-# gen_func = webCDF  
-# # web 80 anb 160
-# topos = MyTopo()
-# net = Mininet(topos, link=TCLink)
-# net.start()
-# evaluation(1)
-# net.stop()
+gen_func = webCDF  
+# web 80 anb 160
+topos = MyTopo()
+net = Mininet(topos, link=TCLink)
+net.start()
+evaluation(1)
+net.stop()
