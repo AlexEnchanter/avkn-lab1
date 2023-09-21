@@ -9,6 +9,7 @@ import random
 import subprocess
 import re
 import time
+import sys
 
 x_web = [0,10_000, 20_000,30_000,50_000,80_000,200_000, 1_000_000, 2_000_000,5_000_000, 10_000_000,30_000_000]	
 y_web = [0., 0.18, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.98, 1.]
@@ -60,10 +61,12 @@ def evaluation(_type):
             result[k][i-1] = flow_time
             count += 1
             print(f" count: {count}, time: {round(flow_time, 4)}, total data: {round(total_data, 4)} MB, real time: {round(after_time - before_time, 4)}\n")
+            print(f" count: {count}, time: {round(flow_time, 4)}, total data: {round(total_data, 4)} MB, real time: {round(after_time - before_time, 4)}\n", file=sys.stderr)
 
     np.save(f'data_{traffic_types[_type]["name"]}_ate-{agr_to_edge_bw}_atc-{agr_to_core_bw}', result)	
 
 def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time = None):
+    print(f"{source} -> {sink}", file=sys.stderr)
     source_node = net.get(source)
     source_ip = source_node.IP()
     sink_node = net.get(sink)
@@ -73,6 +76,7 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
     
     subprocess.getoutput("rm ./iperflog.txt")
     print(f"total flows: {num_of_flows}")
+    print(f"total flows: {num_of_flows}", file=sys.stderr)
     sink_node.cmd(f'iperf -s -P {num_of_flows} -f m -o iperflog.txt &') 
     iperfcmd = "iperf -c {} -n {}K &"
 
@@ -86,6 +90,7 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
         time.sleep(1) # wait 1s 
 
     print(f"waiting for senders to finish, total data to send:{aaa/1000}Mb over {num_of_flows} flows")
+    print(f"waiting for senders to finish, total data to send:{aaa/1000}Mb over {num_of_flows} flows", file=sys.stderr)
     sink_node.cmd("wait")
     source_node.cmd("wait")
 
@@ -105,6 +110,7 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
 
 
 def dataCDF(_):
+    return 5
     return math.ceil(np.interp(random.random(),y_data,x_data)/1000)
 	
 def webCDF(_):
@@ -122,7 +128,7 @@ def getRandomHosts():
 			break 
 	return t1, t2
 
-# setLogLevel('info')
+setLogLevel('debug')
 
 edge_to_host_bw = 20
 agr_to_core_bw = 20
