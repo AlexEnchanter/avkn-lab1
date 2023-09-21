@@ -77,6 +77,7 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
     subprocess.getoutput("rm ./iperflog.txt")
     print(f"total flows: {num_of_flows}")
     print(f"total flows: {num_of_flows}", file=sys.stderr)
+    print(f'running command: iperf -s -P {num_of_flows} -f m -o iperflog.txt &', file=sys.stderr)
     sink_node.cmd(f'iperf -s -P {num_of_flows} -f m -o iperflog.txt &') 
     iperfcmd = "iperf -c {} -n {}K &"
 
@@ -86,6 +87,7 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
             data = 0
             data = gen_func(_type)
             aaa += data
+            print(f"running command: {iperfcmd.format(sink_ip, data)}", file=sys.stderr)
             source_node.cmd(iperfcmd.format(sink_ip, data))
         time.sleep(1) # wait 1s 
 
