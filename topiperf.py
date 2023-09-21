@@ -127,7 +127,7 @@ def getRandomHosts():
 			break 
 	return t1, t2
 
-setLogLevel('debug')
+setLogLevel('info')
 
 edge_to_host_bw = 20
 agr_to_core_bw = 20
