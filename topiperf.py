@@ -93,8 +93,8 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
     total_time = 0
     data_sent = 0
     for lines in iperf_out.split('\n'):
-        total_time += float(re.findall("[0-9]+\.[0-9]*", lines)[1])
-        temp       = float(re.findall("[0-9]+\.[0-9]*", lines)[2])
+        total_time += float(re.findall("[0-9]+\.?[0-9]*", lines)[2])
+        temp       = float(re.findall("[0-9]+\.?[0-9]*", lines)[3])
         if re.search("Kbytes", lines):
             data_sent += temp/1000
         elif re.search("Gbytes", lines):
