@@ -110,7 +110,6 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
 
 
 def dataCDF(_):
-    return 5
     return math.ceil(np.interp(random.random(),y_data,x_data)/1000)
 	
 def webCDF(_):
