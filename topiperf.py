@@ -92,9 +92,7 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
 
     print(f"waiting for senders to finish, total data to send:{aaa/1000}Mb over {num_of_flows} flows")
     print(f"waiting for senders to finish, total data to send:{aaa/1000}Mb over {num_of_flows} flows", file=sys.stderr)
-    # sink_node.cmd("wait")
-    source_node.cmd("wait") 
-    sink_node.cmd("kill %iperf")
+    sink_node.cmd("wait") 
     print("done waiting", file=sys.stderr)
 
     iperf_out = subprocess.getoutput("grep -v 'SUM' iperflog.txt | grep -e '[1-9]] [0-9]'")
@@ -113,7 +111,6 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
 
 
 def dataCDF(_):
-    # return 2
     return math.ceil(np.interp(random.random(),y_data,x_data)/1000)
 	
 def webCDF(_):
