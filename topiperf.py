@@ -62,7 +62,7 @@ def evaluation(_type):
             count += 1
             print(f" count: {count}, avg time: {round(np.mean(flow_time_list), 4)}; min {round(min(flow_time_list), 4)}; max {round(max(flow_time_list), 4)}, total data: {round(total_data, 4)} MB, real time: {round(after_time - before_time, 4)}\n")
             print(f" count: {count}, avg time: {round(np.mean(flow_time_list), 4)}; min {round(min(flow_time_list), 4)}; max {round(max(flow_time_list), 4)}, total data: {round(total_data, 4)} MB, real time: {round(after_time - before_time, 4)}\n", file=sys.stderr)
-    np_list = np.array(result)
+    np_list = np.array(result, dtype=object)
     np.save(f'data_{traffic_types[_type]["name"]}_ate-{agr_to_edge_bw}_atc-{agr_to_core_bw}', np_list)	
 
 def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time = None):
