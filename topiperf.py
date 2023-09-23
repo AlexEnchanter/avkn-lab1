@@ -51,19 +51,19 @@ traffic_types = {1:{'name':'web search', 'flow':80000},2:{'name':'data mining', 
 def evaluation(_type): 
     print(f'doing: data_{traffic_types[_type]["name"]}_ate-{agr_to_edge_bw}_atc-{agr_to_core_bw}')
     count = 0
-    result = np.full(shape = [10,10], fill_value = 0.)
+    result = [[]]*10 
     for k in range(10):
         t1, t2 = getRandomHosts()
         for i in range(1,11):
             before_time = time.time() 
-            flow_time, total_data = genIperf(f'h{t1}',f'h{t2}', _type, i, 10)
+            flow_time_list, total_data = genIperf(f'h{t1}',f'h{t2}', _type, i, 10)
             after_time = time.time()  
-            result[k][i-1] = flow_time
+            result[i-1] = result[i-1] + flow_time_list
             count += 1
-            print(f" count: {count}, time: {round(flow_time, 4)}, total data: {round(total_data, 4)} MB, real time: {round(after_time - before_time, 4)}\n")
-            print(f" count: {count}, time: {round(flow_time, 4)}, total data: {round(total_data, 4)} MB, real time: {round(after_time - before_time, 4)}\n", file=sys.stderr)
-
-    np.save(f'data_{traffic_types[_type]["name"]}_ate-{agr_to_edge_bw}_atc-{agr_to_core_bw}', result)	
+            print(f" count: {count}, avg time: {round(np.mean(flow_time_list), 4)}; min {round(min(flow_time_list), 4)}; max {round(max(flow_time_list), 4)}, total data: {round(total_data, 4)} MB, real time: {round(after_time - before_time, 4)}\n")
+            print(f" count: {count}, avg time: {round(np.mean(flow_time_list), 4)}; min {round(min(flow_time_list), 4)}; max {round(max(flow_time_list), 4)}, total data: {round(total_data, 4)} MB, real time: {round(after_time - before_time, 4)}\n", file=sys.stderr)
+    np_list = np.array(result)
+    np.save(f'data_{traffic_types[_type]["name"]}_ate-{agr_to_edge_bw}_atc-{agr_to_core_bw}', np_list)	
 
 def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time = None):
     print(f"{source} -> {sink}", file=sys.stderr)
@@ -84,7 +84,6 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
     aaa = 0
     for i in range(gen_time):
         for k in range(intensity):
-            data = 0
             data = gen_func(_type)
             aaa += data
             print(f"running command: {iperfcmd.format(sink_ip, data)}", file=sys.stderr)
@@ -94,13 +93,14 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
     print(f"waiting for senders to finish, total data to send:{aaa/1000}Mb over {num_of_flows} flows")
     print(f"waiting for senders to finish, total data to send:{aaa/1000}Mb over {num_of_flows} flows", file=sys.stderr)
     sink_node.cmd("wait")
-    source_node.cmd("wait")
+    # source_node.cmd("wait") 
+    print("done waiting", file=sys.stderr)
 
     iperf_out = subprocess.getoutput("grep -v 'SUM' iperflog.txt | grep -e '[1-9]] [0-9]'")
-    total_time = 0
+    times = []
     data_sent = 0
     for lines in iperf_out.split('\n'):
-        total_time += float(re.findall("[0-9]+\.?[0-9]*", lines)[2])
+        times.append(float(re.findall("[0-9]+\.?[0-9]*", lines)[2]))
         temp       = float(re.findall("[0-9]+\.?[0-9]*", lines)[3])
         if re.search("Kbytes", lines):
             data_sent += temp/1000
@@ -108,10 +108,11 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
             data_sent += temp*1000
         else:
             data_sent += temp
-    return total_time/num_of_flows, data_sent             
+    return times, data_sent             
 
 
 def dataCDF(_):
+    return 2
     return math.ceil(np.interp(random.random(),y_data,x_data)/1000)
 	
 def webCDF(_):
@@ -140,7 +141,6 @@ gen_func = dataCDF
 topos = MyTopo()
 net = Mininet(topos, link=TCLink)
 net.start()
-# CLI(net)
 evaluation(2)
 net.stop()
  
