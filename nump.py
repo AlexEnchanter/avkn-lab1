@@ -10,9 +10,9 @@ names = ["web serch ate20 atc20",  "data mining ate20 atc20",
 ## I want to use axis 1 for lator 
 # for i in range(len(files)):
 data = np.load(files[1])
-mean = [np.mean(data[i], axis=0) for i in range(len(data[i]))]
-percentile_95 = [np.percentile(data,95, axis=0) for i in range(len(data[i]))]
-percentile_99 = [np.percentile(data,99, axis=0) for i in range(len(data[i]))]
+mean = [np.mean(data[i], axis=0) for i in range(10)]
+percentile_95 = [np.percentile(data,95, axis=0) for i in range(10)]
+percentile_99 = [np.percentile(data,99, axis=0) for i in range(10)]
 plt.plot(mean, label="mean")
 plt.plot(percentile_95, label="95%")
 plt.plot(percentile_99, label="99%") 
