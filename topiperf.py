@@ -92,8 +92,9 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
 
     print(f"waiting for senders to finish, total data to send:{aaa/1000}Mb over {num_of_flows} flows")
     print(f"waiting for senders to finish, total data to send:{aaa/1000}Mb over {num_of_flows} flows", file=sys.stderr)
-    sink_node.cmd("wait")
-    # source_node.cmd("wait") 
+    # sink_node.cmd("wait")
+    source_node.cmd("wait") 
+    sink_node.cmd("kill %iperf")
     print("done waiting", file=sys.stderr)
 
     iperf_out = subprocess.getoutput("grep -v 'SUM' iperflog.txt | grep -e '[1-9]] [0-9]'")
@@ -112,7 +113,7 @@ def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time
 
 
 def dataCDF(_):
-    return 2
+    # return 2
     return math.ceil(np.interp(random.random(),y_data,x_data)/1000)
 	
 def webCDF(_):
@@ -152,38 +153,38 @@ net.start()
 evaluation(1)
 net.stop()
  
-agr_to_edge_bw = 80 
-gen_func = dataCDF 
-# data 80
-topos = MyTopo()
-net = Mininet(topos, link=TCLink)
-net.start()
-evaluation(2)
-net.stop()
+# agr_to_edge_bw = 80 
+# gen_func = dataCDF 
+# # data 80
+# topos = MyTopo()
+# net = Mininet(topos, link=TCLink)
+# net.start()
+# evaluation(2)
+# net.stop()
  
-gen_func = webCDF  
-# web 80
-topos = MyTopo()
-net = Mininet(topos, link=TCLink)
-net.start()
-evaluation(1)
-net.stop()
+# gen_func = webCDF  
+# # web 80
+# topos = MyTopo()
+# net = Mininet(topos, link=TCLink)
+# net.start()
+# evaluation(1)
+# net.stop()
 
 
-agr_to_core_bw = 160
-agr_to_edge_bw = 80 
-gen_func = dataCDF 
-# data 80 anb 160
-topos = MyTopo()
-net = Mininet(topos, link=TCLink)
-net.start()
-evaluation(2)
-net.stop()
+# agr_to_core_bw = 160
+# agr_to_edge_bw = 80 
+# gen_func = dataCDF 
+# # data 80 anb 160
+# topos = MyTopo()
+# net = Mininet(topos, link=TCLink)
+# net.start()
+# evaluation(2)
+# net.stop()
  
-gen_func = webCDF  
-# web 80 anb 160
-topos = MyTopo()
-net = Mininet(topos, link=TCLink)
-net.start()
-evaluation(1)
-net.stop()
+# gen_func = webCDF  
+# # web 80 anb 160
+# topos = MyTopo()
+# net = Mininet(topos, link=TCLink)
+# net.start()
+# evaluation(1)
+# net.stop()
