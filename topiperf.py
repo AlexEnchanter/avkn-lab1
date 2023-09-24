@@ -20,9 +20,7 @@ edge_to_host_bw = 20
 agr_to_core_bw = 20
 agr_to_edge_bw = 20
 
-gen_func = None
 debug = False
-total_data_to_send = 0
 
 class MyTopo( Topo  ):
     def build( self ):
@@ -53,8 +51,8 @@ def evaluation(_type):
     count = 0
     result = [[]]*10 
     for k in range(10):
-        t1, t2 = getRandomHosts()
         for i in range(1,11):
+            t1, t2 = getRandomHosts()
             before_time = time.time() 
             flow_time_list, total_data = genIperf(f'h{t1}',f'h{t2}', _type, i, 10)
             after_time = time.time()  
@@ -66,12 +64,17 @@ def evaluation(_type):
     np.save(f'data_{traffic_types[_type]["name"]}_ate-{agr_to_edge_bw}_atc-{agr_to_core_bw}', np_list)	
 
 def genIperf(source = None, sink = None, _type =None, intensity = None, gen_time = None):
+    gen_func = None
+    if _type == 1:
+        gen_func = webCDF
+    else: 
+        gen_func = dataCDF
+    
     print(f"{source} -> {sink}", file=sys.stderr)
     source_node = net.get(source)
     source_ip = source_node.IP()
     sink_node = net.get(sink)
     sink_ip = sink_node.IP()
-    flow_size = gen_func(_type)
     num_of_flows = gen_time*intensity
     
     subprocess.getoutput("rm ./iperflog.txt")
@@ -134,7 +137,6 @@ edge_to_host_bw = 20
 agr_to_core_bw = 20
 agr_to_edge_bw = 20 
 
-gen_func = dataCDF 
 # data 20
 topos = MyTopo()
 net = Mininet(topos, link=TCLink)
@@ -142,7 +144,6 @@ net.start()
 evaluation(2)
 net.stop()
  
-gen_func = webCDF  
 # web 20
 topos = MyTopo()
 net = Mininet(topos, link=TCLink)
@@ -151,7 +152,6 @@ evaluation(1)
 net.stop()
  
 # agr_to_edge_bw = 80 
-# gen_func = dataCDF 
 # # data 80
 # topos = MyTopo()
 # net = Mininet(topos, link=TCLink)
@@ -159,7 +159,6 @@ net.stop()
 # evaluation(2)
 # net.stop()
  
-# gen_func = webCDF  
 # # web 80
 # topos = MyTopo()
 # net = Mininet(topos, link=TCLink)
@@ -170,7 +169,6 @@ net.stop()
 
 # agr_to_core_bw = 160
 # agr_to_edge_bw = 80 
-# gen_func = dataCDF 
 # # data 80 anb 160
 # topos = MyTopo()
 # net = Mininet(topos, link=TCLink)
@@ -178,7 +176,6 @@ net.stop()
 # evaluation(2)
 # net.stop()
  
-# gen_func = webCDF  
 # # web 80 anb 160
 # topos = MyTopo()
 # net = Mininet(topos, link=TCLink)
