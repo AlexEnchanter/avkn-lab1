@@ -7,7 +7,7 @@ files = ["data_web search_ate-20_atc-20.npy",  "data_data mining_ate-20_atc-20.n
 names = ["web serch ate20 atc20",  "data mining ate20 atc20", 
          "web serch ate80 atc20",  "data mining ate80 atc20",
          "web serch ate80 atc160", "data mining ate80 atc160"]
-## I want to use axis 1 for lator 
+
 # for i in range(len(files)):
 one2ten = np.arange(1, 11, 1)
 data = np.load(files[0], allow_pickle=True)
