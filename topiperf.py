@@ -124,9 +124,9 @@ def getRandomHosts():
 
 
 parser = argparse.ArgumentParser(description='Generates and executes data center traffic on mininet.')
-parser.add_argument('-e2h_bw',nargs = '*', help ='Sets the bandwidth between the edge layer switches and hosts', type = int )
-parser.add_argument('-a2e_bw',nargs = '*', help ='Sets the bandwidth between the aggregation layer switches and the edge layer switches', type = int )
-parser.add_argument('-c2a_bw',nargs = '*', help ='Sets the bandwidth between the aggregation layer switches and the core layer switch', type = int )
+parser.add_argument('-e2h_bw',nargs = '*', help ='Sets the bandwidth between the edge layer switches and hosts in Mbps, default 20', type = int, default=[20])
+parser.add_argument('-a2e_bw',nargs = '*', help ='Sets the bandwidth between the aggregation layer switches and the edge layer switches in Mbps, default 20', type = int , default=[20])
+parser.add_argument('-c2a_bw',nargs = '*', help ='Sets the bandwidth between the aggregation layer switches and the core layer switch in Mbps, default 20', type = int , default=[20])
 parser.add_argument('-d',action = 'store_true', help ='Sets debug mode active')
 parser.add_argument('-t', nargs = '?', type = int, default = 10, help ='Sets the generation time, default time is 10s')
 args = parser.parse_args()
