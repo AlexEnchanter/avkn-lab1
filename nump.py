@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 files = ["data_web search_ate-20_atc-20.npy",  "data_data mining_ate-20_atc-20.npy",
          "data_web search_ate-80_atc-20.npy",  "data_data mining_ate-80_atc-20.npy",
          "data_web search_ate-80_atc-160.npy", "data_data mining_ate-80_atc-160.npy"]
-names = ["web serch ate20 atc20",  "data mining ate20 atc20", 
-         "web serch ate80 atc20",  "data mining ate80 atc20",
-         "web serch ate80 atc160", "data mining ate80 atc160"]
+names = ["web search ate20 atc20",  "data mining ate20 atc20", 
+         "web search ate80 atc20",  "data mining ate80 atc20",
+         "web search ate80 atc160", "data mining ate80 atc160"]
 
 one2ten = np.arange(1, 11, 1)
 for i in range(len(files)): 
@@ -25,7 +25,7 @@ for i in range(len(files)):
     plt.xlabel("flows/s")
     plt.ylabel("Completion Time (s)")
     plt.xticks(np.arange(1, 11, 1))
-    plt.title(names[i])
+    # plt.title(names[i])
     plt.legend()
     if "data" in names[i]:
         plt.yscale("log") 
